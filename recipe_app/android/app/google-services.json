@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "774852682511",
+    "project_id": "recipeapp-277e1",
+    "storage_bucket": "recipeapp-277e1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774852682511:android:a0fac36ce6d1270502547a",
+        "android_client_info": {
+          "package_name": "upc.edu.recipe_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCqT7jClDv3MOSSyYXun_BiWGA2Y6tGAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

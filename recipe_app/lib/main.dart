@@ -46,8 +46,6 @@ class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
       name: 'Sal',
       description: 'Ingrediente común en todas las cocinas.',
     );
-
-    widget.ingredientManager.addIngredient(newIngredient);
   }
 
   @override

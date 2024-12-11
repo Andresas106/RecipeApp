@@ -1,10 +1,9 @@
-class Ingredient {
+class Category {
   final String _id;
   final String _name;
   final String _description;
-/*  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();*/
-  Ingredient({
+
+  Category({
     required String id,
     required String name,
     required String description,
@@ -18,9 +17,9 @@ class Ingredient {
 
 
   //Get information from Firebase
-  factory Ingredient.fromJson(String id, Map<String, dynamic> data)
+  factory Category.fromJson(String id, Map<String, dynamic> data)
   {
-    return Ingredient(
+    return Category(
         id: id,
         name: data['name'] ?? '',
         description: data['description'] ?? '');

@@ -14,7 +14,7 @@ class IngredientController {
 
       for(var doc in snapshot.docs)
         {
-          Ingredient ingredient = Ingredient.fromJson(doc.id, doc.data() as Map<String, dynamic>);
+          Ingredient ingredient = Ingredient.fromJson(doc.data() as Map<String, dynamic>);
           ingredients.add(ingredient);
         }
     }catch(e)

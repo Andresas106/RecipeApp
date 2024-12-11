@@ -40,14 +40,6 @@ class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
     _ingredientsFuture = widget.ingredientManager.fetchIngredients();
   }
 
-  void _addIngredient() {
-    Ingredient newIngredient = Ingredient(
-      id: '', // El id será generado automáticamente por IngredientManager
-      name: 'Sal',
-      description: 'Ingrediente común en todas las cocinas.',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +69,7 @@ class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
               return ListTile(
                 title: Text(ingredient.name),
                 subtitle: Text(ingredient.description),
-                trailing: Text(ingredient.id), // Mostrar el ID si es necesario
+                trailing: Text(ingredient.stock.toString())// Mostrar el ID si es necesario
               );
             },
           );

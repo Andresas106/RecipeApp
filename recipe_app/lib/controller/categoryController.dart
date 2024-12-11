@@ -15,7 +15,7 @@ class CategoryController {
 
       for(var doc in snapshot.docs)
       {
-        Category ingredient = Category.fromJson(doc.id, doc.data() as Map<String, dynamic>);
+        Category ingredient = Category.fromJson(doc.data() as Map<String, dynamic>);
         categorias.add(ingredient);
       }
     }catch(e)

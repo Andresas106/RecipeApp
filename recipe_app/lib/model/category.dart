@@ -17,10 +17,10 @@ class Category {
 
 
   //Get information from Firebase
-  factory Category.fromJson(String id, Map<String, dynamic> data)
+  factory Category.fromJson(Map<String, dynamic> data)
   {
     return Category(
-        id: id,
+        id: data['id'],
         name: data['name'] ?? '',
         description: data['description'] ?? '');
   }

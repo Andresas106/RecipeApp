@@ -47,10 +47,10 @@ class Recipe {
   Category get category => _category;
 
   //Get information from Firebase
-  factory Recipe.fromJson(String id, Map<String, dynamic> data)
+  factory Recipe.fromJson(Map<String, dynamic> data)
   {
     return Recipe(
-        id: id,
+        id: data['id'],
         title: data['title'] ?? '',
         description: data['description'] ?? '',
         ingredients: (data['ingredients'] as List<dynamic>?)

@@ -1,8 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_app/controller/ingredientController.dart';
-
-import 'model/ingredients.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'controller/recipeController.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,69 +9,40 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final IngredientController ic = IngredientController();
+  final RecipeController recipeController = RecipeController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FirestoreTestScreen(ingredientManager: ic,),
+      home: FirestoreTestScreen(recipeController: recipeController),
     );
   }
 }
 
 class FirestoreTestScreen extends StatefulWidget {
-  final IngredientController ingredientManager;
+  final RecipeController recipeController;
 
-  FirestoreTestScreen({required this.ingredientManager});
+  FirestoreTestScreen({required this.recipeController});
 
   @override
   _FirestoreTestScreenState createState() => _FirestoreTestScreenState();
 }
 
 class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
-  late Future<List<Ingredient>> _ingredientsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    // Cargar los ingredientes al iniciar la pantalla
-    _ingredientsFuture = widget.ingredientManager.fetchIngredients();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Ingredientes en Firestore')),
-      body: FutureBuilder<List<Ingredient>>(
-        future: _ingredientsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No hay ingredientes disponibles.'));
-          }
-
-          // Lista de ingredientes
-          List<Ingredient> ingredients = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: ingredients.length,
-            itemBuilder: (context, index) {
-              Ingredient ingredient = ingredients[index];
-              return ListTile(
-                title: Text(ingredient.name),
-                subtitle: Text(ingredient.description),
-                trailing: Text(ingredient.stock.toString())// Mostrar el ID si es necesario
-              );
-            },
-          );
-        },
+      appBar: AppBar(title: Text('Prueba de Recetas')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            await widget.recipeController.addRecipe();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Receta añadida a Firestore.')),
+            );
+          },
+          child: Text('Añadir Receta de Prueba'),
+        ),
       ),
     );
   }

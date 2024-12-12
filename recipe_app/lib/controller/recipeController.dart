@@ -1,8 +1,17 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_app/model/recipe.dart';
 
 class RecipeController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
+  String _generateID() {
+    var rand = Random();
+    return 'recipe_${DateTime.now().millisecondsSinceEpoch}_${rand.nextInt(1000)}';
+  }
+
 
   Future<List<Recipe>> fetchRecipes() async {
     List<Recipe> recipes = [];
@@ -23,57 +32,12 @@ class RecipeController {
     return recipes;
   }
 
-  Future<void> addRecipe() async {
+  Future<void> addRecipe(Recipe recipe) async {
     try {
-      // Datos de prueba para la receta
-      Map<String, dynamic> recipeData = {
-        'id': '1',
-        'title': 'Pizza Margherita',
-        'description': 'Pizza italiana clásica con tomate, mozzarella y albahaca.',
-        'ingredients': [
-          {
-            'id': 'ing1',
-            'name': 'Tomate',
-            'description': 'Tomates frescos triturados.',
-            'stock': 200,
-            'unit': 'g',
-          },
-          {
-            'id': 'ing2',
-            'name': 'Mozzarella',
-            'description': 'Queso mozzarella fresco.',
-            'stock': 150,
-            'unit': 'g',
-          },
-          {
-            'id': 'ing3',
-            'name': 'Albahaca',
-            'description': 'Hojas de albahaca fresca.',
-            'stock': 10,
-            'unit': 'hojas',
-          }
-        ],
-        'preparation_steps': [
-          'Precalentar el horno a 220°C.',
-          'Extender la masa de pizza.',
-          'Añadir la salsa de tomate, mozzarella y albahaca.',
-          'Hornear durante 10-15 minutos.'
-        ],
-        'time': 20,
-        'difficulty': 'medium',
-        'images': ['https://positano.lv/wp-content/uploads/2021/12/Margherita-1-300x300.png'],
-        'category': {
-          'id': 'cat1',
-          'name': 'Pizza',
-          'description': 'Platos italianos.',
-        },
-      };
-
-      // Insertar receta en Firestore
-      await _firestore.collection('recipes').doc('1').set(recipeData);
-
-      print('Receta añadida exitosamente.');
-    } catch (e) {
+      String id = recipe.id.isEmpty ? _generateID() : recipe.id;
+      await _firestore.collection('recipes').doc(id).set(recipe.toJson());
+    }catch(e)
+    {
       print('Error al añadir receta: $e');
     }
   }

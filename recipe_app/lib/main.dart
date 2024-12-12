@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'controller/recipeController.dart';
+import 'navigation/AppRouteInformationParser.dart';
+import 'navigation/AppRouterDelegate.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,42 +10,24 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final RecipeController recipeController = RecipeController();
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final AppRouterDelegate _routerDelegate = AppRouterDelegate();
+  final AppRouteInformationParser _routerInformationParser = AppRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FirestoreTestScreen(recipeController: recipeController),
-    );
-  }
-}
-
-class FirestoreTestScreen extends StatefulWidget {
-  final RecipeController recipeController;
-
-  FirestoreTestScreen({required this.recipeController});
-
-  @override
-  _FirestoreTestScreenState createState() => _FirestoreTestScreenState();
-}
-
-class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Prueba de Recetas')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await widget.recipeController.addRecipe();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Receta añadida a Firestore.')),
-            );
-          },
-          child: Text('Añadir Receta de Prueba'),
-        ),
+    return MaterialApp.router(
+      theme: ThemeData(
+        primarySwatch: Colors.blue
       ),
+      routerDelegate: _routerDelegate,
+      routeInformationParser: _routerInformationParser,
     );
   }
 }

@@ -12,7 +12,7 @@ class Recipe {
   final List<String> _preparation_steps;
   final int _time;
   final Difficulty _difficulty;
-  final List<String> _images;
+  final String _image;
   final Category _category;
 
 
@@ -24,7 +24,7 @@ class Recipe {
     required List<String> preparation_steps,
     required int time,
     required Difficulty difficulty,
-    required List<String> images,
+    required String image,
     required Category category
   })  : _id = id,
         _title= title,
@@ -33,7 +33,7 @@ class Recipe {
         _preparation_steps = preparation_steps,
         _time = time,
         _difficulty = difficulty,
-        _images = images,
+        _image = image,
         _category = category;
 
   String get id => _id;
@@ -43,7 +43,7 @@ class Recipe {
   List<String> get preparation_steps => _preparation_steps;
   int get time => _time;
   Difficulty get difficulty => _difficulty;
-  List<String> get images => _images;
+  String get image => _image;
   Category get category => _category;
 
   //Get information from Firebase
@@ -61,7 +61,7 @@ class Recipe {
         preparation_steps: data['preparation_steps'] ?? '',
         time: data['time'] ?? 0,
         difficulty: data['difficulty'] ?? '',
-        images: data['images'] ?? '',
+        image: data['image'] ?? '',
         category: data['category'] ?? '');
   }
 
@@ -76,7 +76,7 @@ class Recipe {
       'preparation_steps' : _preparation_steps,
       'time' : _time,
       'difficulty' : _difficulty,
-      'images' : _images,
+      'image' : _image,
       'category' : _category
     };
   }

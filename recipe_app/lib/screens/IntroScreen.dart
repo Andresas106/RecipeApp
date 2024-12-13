@@ -11,7 +11,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 5), () {
         final routerDelegate = Router.of(context).routerDelegate;
         routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
     });
@@ -19,9 +19,26 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-
+      body: Stack(
+        children: [
+          SizedBox.expand(
+            child: Image.asset('assets/intro_image.jpg', fit: BoxFit.cover,),
+          ),
+          Center(
+            child: Text(
+              'Recipe Application',
+              textAlign: TextAlign.center,
+              style: textTheme.displayLarge!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+          )
+        ],
+      ),
     );
-
   }
 }

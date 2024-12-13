@@ -24,7 +24,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto'
       ),
       routerDelegate: _routerDelegate,
       routeInformationParser: _routerInformationParser,

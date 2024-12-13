@@ -11,7 +11,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 3), () {
         final routerDelegate = Router.of(context).routerDelegate;
         routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
     });
@@ -33,7 +33,7 @@ class _IntroScreenState extends State<IntroScreen> {
               textAlign: TextAlign.center,
               style: textTheme.displayLarge!.copyWith(
                 color: Colors.white,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
               ),
             ),
           )

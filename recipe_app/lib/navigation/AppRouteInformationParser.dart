@@ -6,9 +6,9 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
   Future<RouteSettings> parseRouteInformation(RouteInformation routeInformation) async {
 
     final uri = routeInformation.uri;
-    if(uri.pathSegments.isEmpty) return RouteSettings(name: '/');
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'login') return RouteSettings(name: '/login');
-    //if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'products') return RouteSettings(name: '/products');
+    if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'register') return RouteSettings(name: '/register');
+    if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'recipes') return RouteSettings(name: '/recipes');
     /*if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'productDetail'){
       final productJsonString = uri.pathSegments[1];
       final product = Product.fromJsonString(productJsonString);

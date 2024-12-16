@@ -12,7 +12,20 @@
           "package_name": "upc.edu.recipe_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "774852682511-lvtu4nknf4rhhao0etbu0bg6c4otj3e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "upc.edu.recipe_app",
+            "certificate_hash": "d6e17519a674548a8905f285e02d17e0a5ac5dc3"
+          }
+        },
+        {
+          "client_id": "774852682511-jeg4kkrjuj1lrmsj0g46dg1rs93r6qst.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBCqT7jClDv3MOSSyYXun_BiWGA2Y6tGAQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774852682511-jeg4kkrjuj1lrmsj0g46dg1rs93r6qst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -27,13 +27,17 @@ class AuthService {
     }catch(e)
     {
       print('Error al iniciar sesion con usuario y contraseña: $e');
+      return null;
     }
   }
 
   Future<User?> loginWithGoogle() async {
     try {
+      print('aqui entra');
       // Iniciar el flujo de autenticación de Google
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      print(googleUser);
       // Si el usuario cancela el inicio de sesión
       if(googleUser == null) return null;
 
@@ -52,6 +56,7 @@ class AuthService {
     }catch(e)
     {
       print('Error al iniciar sesion con google: $e');
+      return null;
     }
   }
 

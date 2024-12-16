@@ -48,7 +48,7 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
           return false;
         }
 
-        if(_currentRoute?.name == '/register')
+        if(_currentRoute?.name == '/register' || _currentRoute?.name == '/recipes')
         {
           _setNewRoutePath(RouteSettings(name: '/login'));
         }
@@ -65,7 +65,7 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
 class CustomTransitionPage extends Page {
   final Widget child;
 
-  CustomTransitionPage({required LocalKey key,required  this.child})
+  const CustomTransitionPage({required LocalKey key,required  this.child})
   : super(key: key);
   @override
   Route createRoute(BuildContext context) {

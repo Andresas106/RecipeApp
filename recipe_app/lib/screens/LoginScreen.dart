@@ -30,10 +30,7 @@ class _IntroScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                child: Image.asset('assets/logo.jpg', height: 20,),
-              ),
-              const SizedBox(height: 20),
+              SizedBox(height: 30,),
               Text('Welcome', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.teal[700]),
               ),
               const SizedBox(height: 10,),

@@ -10,23 +10,39 @@ class Registerscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Registration'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 48),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 30,),
+            Text('Registration', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.teal[700]),
+            ),
+            const SizedBox(height: 10,),
+            Text('Please register to create your account', style:  TextStyle(fontSize: 16, color: Colors.grey[600]),
+            ),
+            const SizedBox(height: 30,),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)
+                  )),
             ),
+            const SizedBox(height: 20,),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 final email = emailController.text.trim();
@@ -51,7 +67,14 @@ class Registerscreen extends StatelessWidget {
                   });
                 }
               },
-              child: Text('Register'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text('Login', style: TextStyle(fontSize: 18, color: Colors.white),)
             ),
           ],
         ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:recipe_app/navigation/AppRouterDelegate.dart';
 
@@ -9,13 +11,23 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-        final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-        routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
+
+    _timer = Timer(Duration(seconds: 3), () {
+      final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
+      routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+
   }
 
   @override

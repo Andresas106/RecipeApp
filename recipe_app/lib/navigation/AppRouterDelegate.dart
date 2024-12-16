@@ -32,7 +32,6 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
     return Navigator(
       key: navigatorKey,
       pages: [
-
           CustomTransitionPage(key: ValueKey('IntroScreen'),
               child: IntroScreen()),
         if(_currentRoute?.name == '/login')
@@ -53,9 +52,9 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
         {
           _setNewRoutePath(RouteSettings(name: '/login'));
         }
-        /*else if(_currentRoute?.name == '/login') {
-          SystemNavigator.pop();
-        }*/
+        else if(_currentRoute?.name == '/login') {
+           SystemNavigator.pop();
+        }
 
         return true;
       },

@@ -15,7 +15,6 @@ class _IntroScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
@@ -24,30 +23,53 @@ class _IntroScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        automaticallyImplyLeading: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20,),
-            ElevatedButton(
-                onPressed: () async {
-                  final email = emailController.text.trim();
-                  final password = passwordController.text.trim();
-                  final user = await _authService.loginWithEmail(email, password);
-                  if(user == null)
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Image.asset('assets/logo.jpg', height: 20,),
+              ),
+              const SizedBox(height: 20),
+              Text('Welcome', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.teal[700]),
+              ),
+              const SizedBox(height: 10,),
+              Text('Please login to your account', style:  TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 30,),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)
+                    )
+                ),
+              ),
+              const SizedBox(height: 20,),
+              TextField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                obscureText: true,
+              ),
+
+              const SizedBox(height: 20,),
+              ElevatedButton(
+                  onPressed: () async {
+                    final email = emailController.text.trim();
+                    final password = passwordController.text.trim();
+                    final user = await _authService.loginWithEmail(email, password);
+                    if(user == null)
                     {
                       showDialog(context: context, builder: (BuildContext builder) {
                         return AlertDialog(
@@ -63,17 +85,25 @@ class _IntroScreenState extends State<LoginScreen> {
                         );
                       });
                     }
-                  else {
-                    final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-                    routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
-                  }
-                },
-                child: Text('Login')
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  final user = await _authService.loginWithGoogle();
-                  if(user == null)
+                    else {
+                      final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
+                      routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text('Login', style: TextStyle(fontSize: 18, color: Colors.white),)
+              ),
+              const SizedBox(height: 20,),
+              ElevatedButton.icon(
+                  onPressed: () async {
+                    final user = await _authService.loginWithGoogle();
+                    if(user == null)
                     {
                       showDialog(context: context, builder: (BuildContext builder) {
                         return AlertDialog(
@@ -89,25 +119,38 @@ class _IntroScreenState extends State<LoginScreen> {
                         );
                       });
                     }
-                  else
+                    else
                     {
                       final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
                       routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
                     }
-                },
-                child: Text('Login with Google')
-            ),
-            TextButton(
-                onPressed: () {
-                  final routerDelegate = Router.of(context).routerDelegate;
-                  routerDelegate.setNewRoutePath(RouteSettings(name: '/register'));
-                },
-                child: Text('Don\'t have account? Create one')
-            ),
-          ],
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white70,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                icon: Icon(Icons.g_mobiledata, size: 40,),
+                label: const Text(
+                  'Login with Google',
+                  style: TextStyle(fontSize: 18, color: Colors.black87),
+                ),
+              ),
+              const SizedBox(height: 20,),
+              TextButton(
+                  onPressed: () {
+                    final routerDelegate = Router.of(context).routerDelegate;
+                    routerDelegate.setNewRoutePath(RouteSettings(name: '/register'));
+                  },
+                  child: Text('Don\'t have account? Create one', style: TextStyle(fontSize: 16, color: Colors.teal, decoration: TextDecoration.underline),
+                  ),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
     );
-
   }
 }

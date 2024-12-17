@@ -43,23 +43,17 @@ class AuthService {
 
   Future<User?> loginWithGoogle() async {
     try {
-      print('aqui entra');
       // Iniciar el flujo de autenticación de Google
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
-      print(googleUser);
       // Si el usuario cancela el inicio de sesión
       if(googleUser == null) return null;
-
       // Obtener detalles de autenticación
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
       // Crear credenciales para Firebase
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken
       );
-
       // Iniciar sesión con las credenciales de Google en Firebase
       final UserCredential result = await _auth.signInWithCredential(credential);
       return result.user;

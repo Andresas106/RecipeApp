@@ -77,10 +77,4 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
     );
   }
-
-
-}
-
-
-
 }

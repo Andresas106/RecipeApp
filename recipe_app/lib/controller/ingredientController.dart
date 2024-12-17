@@ -22,4 +22,16 @@ class IngredientController {
 
     return ingredients;
   }
+
+  Future<List<Ingredient>> fetchIngredientsBySearch(String query) async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('ingredients')
+        .where('name', isGreaterThanOrEqualTo: query)
+        .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      return Ingredient.fromJson(doc.data());
+    }).toList();
+  }
 }

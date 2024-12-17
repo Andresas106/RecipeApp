@@ -12,7 +12,6 @@ class RecipeController {
     return 'recipe_${DateTime.now().millisecondsSinceEpoch}_${rand.nextInt(1000)}';
   }
 
-
   Future<List<Recipe>> fetchRecipes() async {
     List<Recipe> recipes = [];
 

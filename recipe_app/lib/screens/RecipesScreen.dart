@@ -10,10 +10,6 @@ class RecipesScreen extends StatefulWidget {
 }
 
 class _RecipesScreenState extends State<RecipesScreen> {
-  final AuthService _authService = AuthService();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
 
   @override
   void initState() {
@@ -23,6 +19,16 @@ class _RecipesScreenState extends State<RecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Recipes', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(onPressed: () {
+
+          }, icon: Icon(Icons.add))
+        ],
+      ),
     );
 
   }

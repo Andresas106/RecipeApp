@@ -23,6 +23,11 @@ class _IntroScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Login', style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.blue,
+          automaticallyImplyLeading: false,
+        ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -30,13 +35,13 @@ class _IntroScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 30,),
+              //SizedBox(height: 30,),
               Text('Welcome', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.teal[700]),
               ),
               const SizedBox(height: 10,),
               Text('Please login to your account', style:  TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 20,),
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(

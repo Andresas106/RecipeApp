@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_app/model/ingredients.dart';
+import 'package:recipe_app/utils/stringExtensions.dart';
 
 class IngredientController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -26,8 +27,8 @@ class IngredientController {
   Future<List<Ingredient>> fetchIngredientsBySearch(String query) async {
     var snapshot = await FirebaseFirestore.instance
         .collection('ingredients')
-        .where('name', isGreaterThanOrEqualTo: query)
-        .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+        .where('name', isGreaterThanOrEqualTo: query.capitalize())
+        .where('name', isLessThanOrEqualTo: query.capitalize() + '\uf8ff')
         .get();
 
     return snapshot.docs.map((doc) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'controller/recipeController.dart';
 import 'navigation/AppRouteInformationParser.dart';
 import 'navigation/AppRouterDelegate.dart';
 

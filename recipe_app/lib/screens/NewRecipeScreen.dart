@@ -16,6 +16,7 @@ class NewRecipeScreen extends StatefulWidget {
 
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final List<Ingredient> _selectedIngredients = [];
+  final Map<Ingredient, int> _quantitiesIngredients = {};
   final List<String> _preparationSteps = [];
   final ingredientController = IngredientController();
 
@@ -26,9 +27,54 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   void _addIngredients(Ingredient ingredient){
     if(!_selectedIngredients.contains(ingredient))
     {
-      setState(() {
-        _selectedIngredients.add(ingredient);
-      });
+      TextEditingController quantityController = TextEditingController();
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Set quantity for ${ingredient.name}'),
+              content: TextField(
+                controller: quantityController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Quantity',
+                  prefixIcon: Icon(Icons.numbers),
+                  border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)
+                  ),
+                )
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      int quantity = int.tryParse(quantityController.text) ?? 1;
+                      setState(() {
+                        _selectedIngredients.add(ingredient);
+                        _quantitiesIngredients[ingredient] = quantity;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Text('Add'))
+              ],
+            );
+          });
+    }
+    else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error adding ingredient'),
+              content: Text('The ingredient ${ingredient.name} is already in the list'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'))
+              ],
+            );
+          });
     }
   }
 
@@ -118,7 +164,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                     onSelected: (Ingredient selection) {
                       _addIngredients(selection);
                       searchController.clear();
-                      FocusScope.of(context).unfocus();
+                      FocusManager.instance.primaryFocus?.unfocus();
                     },
                     fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
                       searchController = controller;
@@ -142,13 +188,16 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                     itemCount: _selectedIngredients.length,
                     itemBuilder: (context, index) {
                       final ingredient = _selectedIngredients[index];
+                      final quantity = _quantitiesIngredients[ingredient] ?? 1;
                       return ListTile(
-                          title: Text(ingredient.name),
+                          title: Text('${ingredient.name} - x${quantity}',
+                          ),
                           subtitle: Text(ingredient.description),
                           trailing: IconButton(
                             onPressed: () {
-                              setState(() {
+                              setState( () {
                                 _selectedIngredients.removeAt(index);
+                                _quantitiesIngredients.remove(ingredient);
                               });
                             },
                             icon: Icon(Icons.delete, color: Colors.red),

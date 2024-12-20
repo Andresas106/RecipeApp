@@ -7,6 +7,31 @@ class Registerscreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+
+
+  void showErrorMessage(String message, BuildContext context)
+  {
+    showDialog(context: context, builder: (BuildContext builder) {
+      return AlertDialog(
+        title: Text('Registration Failed'),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'))
+        ],
+      );
+    });
+  }
+
+  bool isEmailValid(String email) {
+    String emailPattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    RegExp regExp = new RegExp(emailPattern);
+    return regExp.hasMatch(email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,24 +78,14 @@ class Registerscreen extends StatelessWidget {
               onPressed: () async {
                 final email = emailController.text.trim();
                 final password = passwordController.text.trim();
-                final user =
-                await _authService.registerWithEmail(email, password);
+                final user = await _authService.registerWithEmail(email, password);
                 if (user != null) {
                   Navigator.pop(context);
-                } else {
-                  showDialog(context: context, builder: (BuildContext builder) {
-                    return AlertDialog(
-                      title: Text('Registration Failed'),
-                      content: Text('Invalid username or password for the registration. Please try again.'),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('OK'))
-                      ],
-                    );
-                  });
+                } else if(password.length < 6) {
+                  showErrorMessage('Password must have 6 or more letters. Please try again', context);
+                }
+                else if(!isEmailValid(email)){
+                  showErrorMessage('Email must have the correct format. Please try again', context);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -80,7 +95,7 @@ class Registerscreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text('Login', style: TextStyle(fontSize: 18, color: Colors.white),)
+              child: Text('Register', style: TextStyle(fontSize: 18, color: Colors.white),)
             ),
           ],
         ),

@@ -19,6 +19,17 @@ class Ingredient {
   int get id => _id;
   int get stock => _stock;
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! Ingredient) return false;
+    return other.id == id;
+  }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => id.hashCode;
+
 
   //Get information from Firebase
   factory Ingredient.fromJson(Map<String, dynamic> data)

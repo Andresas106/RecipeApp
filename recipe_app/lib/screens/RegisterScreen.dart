@@ -14,6 +14,7 @@ class Registerscreen extends StatelessWidget {
         title: Text('Registration', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
         iconTheme: IconThemeData(color: Colors.white),
+        automaticallyImplyLeading: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 48),

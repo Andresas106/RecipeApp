@@ -16,10 +16,10 @@ class NewRecipeScreen extends StatefulWidget {
 
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final List<Ingredient> _selectedIngredients = [];
+  final List<String> _preparationSteps = [];
   final ingredientController = IngredientController();
 
   Future<List<Ingredient>> _getSuggestions(String query) async{
-    print(ingredientController.fetchIngredientsBySearch(query).toString());
     return await ingredientController.fetchIngredientsBySearch(query);
   }
 
@@ -30,6 +30,26 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         _selectedIngredients.add(ingredient);
       });
     }
+  }
+
+  void _addPreparationSteps()
+  {
+    setState(() {
+      _preparationSteps.add('');
+    });
+  }
+
+  void _removePreparationSteps(int index)
+  {
+    setState(() {
+      _preparationSteps.removeAt(index);
+    });
+  }
+
+  void _updatePreparationStep(int index, String step){
+    setState(() {
+      _preparationSteps[index] = step;
+    });
   }
 
   @override
@@ -63,7 +83,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                   const SizedBox(height: 30,),
                   Text('Add new Recipe', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.teal[700]),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Text('Refill the form to add a new recipe', style:  TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 30,),
@@ -76,7 +96,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                             borderRadius: BorderRadius.circular(8)
                         )),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   TextField(
                     controller: descriptionControler,
                     keyboardType: TextInputType.multiline,
@@ -88,7 +108,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                             borderRadius: BorderRadius.circular(8)
                         )),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Autocomplete<Ingredient>(
                     optionsBuilder: (TextEditingValue textEditingValue) async {
                       if(textEditingValue.text == '') return const Iterable<Ingredient>.empty();
@@ -115,27 +135,53 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                       );
                     },
                   ),
-                  SizedBox(height: 20,),
-                  Text('Selected Ingredients', style: TextStyle(fontWeight: FontWeight.bold),),
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: _selectedIngredients.length,
-                          itemBuilder: (context, index) {
-                            final ingredient = _selectedIngredients[index];
-                            return ListTile(
-                                title: Text(ingredient.name),
-                                subtitle: Text(ingredient.description),
-                                trailing: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedIngredients.removeAt(index);
-                                    });
-                                  },
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                )
-                            );
-                          })
-                  )
+                  const SizedBox(height: 20,),
+                  const Text('Selected Ingredients', style: TextStyle(fontWeight: FontWeight.bold),),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _selectedIngredients.length,
+                    itemBuilder: (context, index) {
+                      final ingredient = _selectedIngredients[index];
+                      return ListTile(
+                          title: Text(ingredient.name),
+                          subtitle: Text(ingredient.description),
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _selectedIngredients.removeAt(index);
+                              });
+                            },
+                            icon: Icon(Icons.delete, color: Colors.red),
+                          )
+                      );
+                    }
+                  ),
+                  const SizedBox(height: 20,),
+                  const Text('Preparation Steps', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ..._preparationSteps.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    return ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: -24 ),
+                      title: TextField(
+                        onChanged: (value) => _updatePreparationStep(index, value), // Actualizar paso
+                        decoration: InputDecoration(
+                            labelText: 'Step ${index + 1}',
+                            prefixIcon: Icon(Icons.fastfood),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _removePreparationSteps(index), // Eliminar paso
+                      ),
+
+                    );
+                  }).toList(),
+                  ElevatedButton(
+                      onPressed: _addPreparationSteps,
+                      child: Text('Add Step'))
                 ],
               ),
             )

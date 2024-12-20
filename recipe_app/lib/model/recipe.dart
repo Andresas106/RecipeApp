@@ -14,7 +14,6 @@ class Recipe {
   final int _time;
   final Difficulty _difficulty;
   final String _image;
-
   final Category _category;
 
 

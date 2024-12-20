@@ -104,6 +104,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     final TextEditingController titleControler = TextEditingController();
     final TextEditingController descriptionControler = TextEditingController();
     TextEditingController searchController = TextEditingController();
+    final TextEditingController timeController = TextEditingController();
 
 
     return Scaffold(
@@ -230,7 +231,18 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                   }).toList(),
                   ElevatedButton(
                       onPressed: _addPreparationSteps,
-                      child: Text('Add Step'))
+                      child: Text('Add Step')),
+                  const SizedBox(height: 20,),
+                  TextField(
+                    controller: timeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Time (minutes)',
+                        prefixIcon: Icon(Icons.timelapse),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8)
+                        )),
+                  ),
                 ],
               ),
             )

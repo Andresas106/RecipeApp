@@ -9,7 +9,7 @@ class Recipe {
   final String _title;
   final String _description;
   final List<Ingredient> _ingredients;
-  final Map<String, int> _ingredientQuantities;
+  final Map<Ingredient, int> _ingredientQuantities;
   final List<String> _preparation_steps;
   final int _time;
   final Difficulty _difficulty;
@@ -22,7 +22,7 @@ class Recipe {
     required String title,
     required String description,
     required List<Ingredient> ingredients,
-    required Map<String, int> ingredientQuantities,
+    required Map<Ingredient, int> ingredientQuantities,
     required List<String> preparation_steps,
     required int time,
     required Difficulty difficulty,
@@ -43,7 +43,7 @@ class Recipe {
   String get title => _title;
   String get description => _description;
   List<Ingredient> get ingredients => _ingredients;
-  Map<String, int> get ingredientQuantities => _ingredientQuantities;
+  Map<Ingredient, int> get ingredientQuantities => _ingredientQuantities;
   List<String> get preparation_steps => _preparation_steps;
   int get time => _time;
   Difficulty get difficulty => _difficulty;
@@ -53,9 +53,10 @@ class Recipe {
   //Get information from Firebase
   factory Recipe.fromJson(Map<String, dynamic> data)
   {
-    var ingredientQuantities = (data['ingredient_quantities'] as Map<String, dynamic>?)?.map(
-          (key, value) => MapEntry(key, value as int),
-    ) ?? {};
+    var ingredientQuantities = (data['ingredient_quantities'] as Map<String, dynamic>?)
+        ?.map((key, value) => MapEntry(
+        Ingredient.fromJson(Map<String, dynamic>.from(data['ingredients'].firstWhere((ingredient) => ingredient['id'] == key))),
+        value as int)) ?? {};
 
     return Recipe(
         id: data['id'],
@@ -67,11 +68,13 @@ class Recipe {
             .toList() ??
             [],
         ingredientQuantities: ingredientQuantities,
-        preparation_steps: data['preparation_steps'] ?? '',
+        preparation_steps: List<String>.from(data['preparation_steps'] ?? []),
         time: data['time'] ?? 0,
-        difficulty: data['difficulty'] ?? '',
+        difficulty: Difficulty.values.firstWhere((e) => e.toString() == 'Difficulty.${data['difficulty']}',
+            orElse: () => Difficulty.low),
         image: data['image'] ?? '',
-        category: data['category'] ?? '');
+        category: Category.fromJson(Map<String, dynamic>.from(data['category'] ?? {}))
+    );
   }
 
   //Save information to Firebase
@@ -82,12 +85,12 @@ class Recipe {
       'title' : _title,
       'description' : _description,
       'ingredients' : _ingredients.map((ingredient) => ingredient.toJson()).toList(),
-      'ingredient_quantities': _ingredientQuantities,
+      'ingredient_quantities': _ingredientQuantities.map((key, value) => MapEntry(key.id.toString(), value)),
       'preparation_steps' : _preparation_steps,
       'time' : _time,
-      'difficulty' : _difficulty,
+      'difficulty' : _difficulty.name,
       'image' : _image,
-      'category' : _category
+      'category' : _category.toJson()
     };
   }
 }

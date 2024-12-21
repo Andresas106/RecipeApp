@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:recipe_app/controller/categoryController.dart';
 import 'package:recipe_app/controller/ingredientController.dart';
+import 'package:recipe_app/controller/recipeController.dart';
 import 'package:recipe_app/model/ingredients.dart';
 import 'package:recipe_app/model/recipe.dart';
 import 'package:recipe_app/utils/authService.dart';
 
+import '../model/category.dart';
 import '../navigation/AppRouterDelegate.dart';
+import '../utils/imageProcessing.dart';
 
 
 
@@ -19,11 +26,26 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final List<Ingredient> _selectedIngredients = [];
   final Map<Ingredient, int> _quantitiesIngredients = {};
   final List<String> _preparationSteps = [];
+  final categoryController = CategoryController();
   final ingredientController = IngredientController();
+  final recipeController = RecipeController();
   Difficulty? _selectedDifficulty = null;
+  List<Category> _categoriesList = [];
+  Category? _selectedCategory = null;
+  File? selectedImage;
+  final ImagePicker _imagePicker = ImagePicker();
+  final TextEditingController titleControler = TextEditingController();
+  final TextEditingController descriptionControler = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
 
   Future<List<Ingredient>> _getSuggestions(String query) async{
     return await ingredientController.fetchIngredientsBySearch(query);
+  }
+
+  Future<void> _getCategories() async {
+     _categoriesList = await categoryController.fetchCategory();
+     print(_categoriesList);
   }
 
   void _addIngredients(Ingredient ingredient){
@@ -100,13 +122,43 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     });
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
+
+    if(pickedImage != null) {
+      setState(() {
+        selectedImage = File(pickedImage.path);
+      });
+    }
+
+  }
+
+  void showErrorMessage(String message, BuildContext context)
+  {
+    showDialog(context: context, builder: (BuildContext builder) {
+      return AlertDialog(
+        title: Text('New Recipe entry error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'))
+        ],
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     final AuthService _authService = AuthService();
-    final TextEditingController titleControler = TextEditingController();
-    final TextEditingController descriptionControler = TextEditingController();
-    TextEditingController searchController = TextEditingController();
-    final TextEditingController timeController = TextEditingController();
 
 
     return Scaffold(
@@ -184,7 +236,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                     },
                   ),
                   const SizedBox(height: 20,),
-                  const Text('Selected Ingredients', style: TextStyle(fontWeight: FontWeight.bold),),
+                  const Text('Selected Ingredients', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: _selectedIngredients.length,
@@ -208,7 +260,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                     }
                   ),
                   const SizedBox(height: 20,),
-                  const Text('Preparation Steps', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Preparation Steps', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                   ..._preparationSteps.asMap().entries.map((entry) {
                     int index = entry.key;
                     return ListTile(
@@ -230,9 +282,18 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
                     );
                   }).toList(),
+                  const SizedBox(height: 20,),
                   ElevatedButton(
                       onPressed: _addPreparationSteps,
-                      child: Text('Add Step')),
+                      child: Text('Add Step', style: TextStyle(fontSize: 18, color: Colors.white),),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                  ),
                   const SizedBox(height: 20,),
                   TextField(
                     controller: timeController,
@@ -245,7 +306,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         )),
                   ),
                   const SizedBox(height: 20,),
-                  DropdownButton<Difficulty>(
+                  DropdownButtonFormField<Difficulty>(
                       value: _selectedDifficulty,
                       hint: Text('Select a difficulty'),
                       items: Difficulty.values.map((Difficulty difficulty) {
@@ -260,6 +321,115 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         });
                       },
                     isExpanded: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.grade),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)
+                      )
+                    )
+                  ),
+                  const SizedBox(height: 20,),
+                  DropdownButtonFormField<Category>(
+                      value: _selectedCategory,
+                      hint: Text('Select a category'),
+                      items: _categoriesList.map((category) {
+                        return DropdownMenuItem<Category>(
+                          value: category, // Asignamos el objeto completo
+                          child: Text(category.name), // Mostramos el nombre
+                        );
+                      }).toList(),
+                      onChanged: (Category? newValue) {
+                        setState(() {
+                          _selectedCategory = newValue;
+                        });
+                      },
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.category_sharp),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8)
+                          )
+                      )
+                  ),
+                  const SizedBox(height: 20,),
+                  ElevatedButton.icon(
+                      onPressed: _pickImage,
+                      label: const Text('Select image', style: TextStyle(color: Colors.white, fontSize: 18),),
+                      icon: Icon(Icons.image, color: Colors.white,),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                  ),
+                  const SizedBox(height: 10,),
+                  if(selectedImage != null)
+                    Column(
+                      children: [
+                        const Text("Selected Image:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                        const SizedBox(height: 10),
+                        Image.file(
+                          selectedImage!,
+                          height: 150,
+                        ),
+                      ],
+                    ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        bool hasValidInputs = titleControler.text.trim().isNotEmpty &&
+                            descriptionControler.text.trim().isNotEmpty &&
+                            _selectedIngredients.isNotEmpty &&
+                            _quantitiesIngredients.isNotEmpty &&
+                            _preparationSteps.isNotEmpty &&
+                            timeController.text.trim().isNotEmpty &&
+                            _selectedDifficulty != null &&
+                            _selectedCategory != null &&
+                            selectedImage != null;
+
+
+                        if(hasValidInputs) {
+                          bool arePreparationStepsValid = _preparationSteps.every((step) => step.trim().isNotEmpty);
+                          if(arePreparationStepsValid) {
+                            String base64Image = await ImageProcessing.imageFileToBase64(selectedImage!);
+                            Recipe recipe = Recipe(
+                                id: recipeController.generateID(),
+                                title: titleControler.text.trim(),
+                                description: descriptionControler.text.trim(),
+                                ingredients: _selectedIngredients,
+                                ingredientQuantities: _quantitiesIngredients,
+                                preparation_steps: _preparationSteps,
+                                time: int.parse(timeController.text.trim()),
+                                difficulty: _selectedDifficulty!,
+                                image: base64Image,
+                                category: _selectedCategory!);
+
+                            recipeController.addRecipe(recipe);
+
+                            final routerDelegate = Router.of(context).routerDelegate;
+                            routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
+                          }
+                          else {
+                            showErrorMessage('Don\' leave the preparation steps empty.', context);
+                          }
+
+                        }
+                        else {
+                          showErrorMessage('Fill in all the empty fields.', context);
+                        }
+
+
+                      },
+                      child: Text('Add recipe',style: TextStyle(fontSize: 18, color: Colors.black87)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white70,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   )
                 ],
               ),

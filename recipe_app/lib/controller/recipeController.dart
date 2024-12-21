@@ -7,7 +7,7 @@ class RecipeController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
-  String _generateID() {
+  String generateID() {
     var rand = Random();
     return 'recipe_${DateTime.now().millisecondsSinceEpoch}_${rand.nextInt(1000)}';
   }
@@ -33,7 +33,7 @@ class RecipeController {
 
   Future<void> addRecipe(Recipe recipe) async {
     try {
-      String id = recipe.id.isEmpty ? _generateID() : recipe.id;
+      String id = recipe.id.isEmpty ? generateID() : recipe.id;
       await _firestore.collection('recipes').doc(id).set(recipe.toJson());
     }catch(e)
     {

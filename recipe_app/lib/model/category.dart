@@ -1,10 +1,10 @@
 class Category {
-  final String _id;
+  final int _id;
   final String _name;
   final String _description;
 
   Category({
-    required String id,
+    required int id,
     required String name,
     required String description,
   })  : _name = name,
@@ -13,7 +13,7 @@ class Category {
 
   String get name => _name;
   String get description => _description;
-  String get id => _id;
+  int get id => _id;
 
 
   //Get information from Firebase

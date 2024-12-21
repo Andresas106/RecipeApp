@@ -91,3 +91,19 @@ class Recipe {
     };
   }
 }
+
+
+extension DifficultyExtension on Difficulty {
+  String get displayName {
+    switch (this) {
+      case Difficulty.high:
+        return 'High';
+      case Difficulty.medium:
+        return 'Medium';
+      case Difficulty.low:
+        return 'Low';
+      default:
+        return '';
+    }
+  }
+}

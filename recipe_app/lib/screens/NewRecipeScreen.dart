@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/controller/ingredientController.dart';
 import 'package:recipe_app/model/ingredients.dart';
+import 'package:recipe_app/model/recipe.dart';
 import 'package:recipe_app/utils/authService.dart';
 
 import '../navigation/AppRouterDelegate.dart';
@@ -19,6 +20,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final Map<Ingredient, int> _quantitiesIngredients = {};
   final List<String> _preparationSteps = [];
   final ingredientController = IngredientController();
+  Difficulty? _selectedDifficulty = null;
 
   Future<List<Ingredient>> _getSuggestions(String query) async{
     return await ingredientController.fetchIngredientsBySearch(query);
@@ -124,7 +126,6 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 48),
           child: SingleChildScrollView(
             child: Container(
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
               child: Column(
                 children: [
                   const SizedBox(height: 30,),
@@ -243,14 +244,28 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                             borderRadius: BorderRadius.circular(8)
                         )),
                   ),
+                  const SizedBox(height: 20,),
+                  DropdownButton<Difficulty>(
+                      value: _selectedDifficulty,
+                      hint: Text('Select a difficulty'),
+                      items: Difficulty.values.map((Difficulty difficulty) {
+                        return DropdownMenuItem<Difficulty>(
+                          value: difficulty,
+                          child: Text(difficulty.displayName),
+                        );
+                      }).toList(),
+                      onChanged: (Difficulty? newValue) {
+                        setState(() {
+                          _selectedDifficulty = newValue!;
+                        });
+                      },
+                    isExpanded: true,
+                  )
                 ],
               ),
             )
-
           )
-
       ),
-
     );
   }
 }

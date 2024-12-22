@@ -377,6 +377,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         ),
                       ],
                     ),
+                  SizedBox(height: 20,),
                   ElevatedButton(
                       onPressed: () async {
                         bool hasValidInputs = titleControler.text.trim().isNotEmpty &&
@@ -419,8 +420,6 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         else {
                           showErrorMessage('Fill in all the empty fields.', context);
                         }
-
-
                       },
                       child: Text('Add recipe',style: TextStyle(fontSize: 18, color: Colors.black87)),
                     style: ElevatedButton.styleFrom(

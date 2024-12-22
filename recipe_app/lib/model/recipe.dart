@@ -55,7 +55,7 @@ class Recipe {
   {
     var ingredientQuantities = (data['ingredient_quantities'] as Map<String, dynamic>?)
         ?.map((key, value) => MapEntry(
-        Ingredient.fromJson(Map<String, dynamic>.from(data['ingredients'].firstWhere((ingredient) => ingredient['id'] == key))),
+        Ingredient.fromJson(Map<String, dynamic>.from(data['ingredients'].firstWhere((ingredient) => ingredient['id'] == int.parse(key)))),
         value as int)) ?? {};
 
     return Recipe(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/model/recipe.dart';
 
+import '../controller/recipeController.dart';
 import '../navigation/AppRouterDelegate.dart';
 import '../utils/authService.dart';
 
@@ -11,10 +13,17 @@ class RecipesScreen extends StatefulWidget {
 }
 
 class _RecipesScreenState extends State<RecipesScreen> {
+  final recipeController = RecipeController();
+  List<Recipe> _recipesList = [];
 
   @override
   void initState() {
     super.initState();
+    _getRecipes();
+  }
+
+  Future<void> _getRecipes() async{
+    _recipesList = await recipeController.fetchRecipes();
   }
 
   @override
@@ -39,6 +48,18 @@ class _RecipesScreenState extends State<RecipesScreen> {
           }, icon: Icon(Icons.logout))
         ],
       ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 48),
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+
+              ],
+            ),
+          ),
+        ),
+      )
     );
 
   }

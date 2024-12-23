@@ -40,4 +40,13 @@ class RecipeController {
       print('Error al añadir receta: $e');
     }
   }
+
+  Future<void> deleteRecipe(String id) async {
+    try {
+      await _firestore.collection('recipes').doc(id).delete();
+    }catch(e)
+    {
+      print('Error al añadir receta: $e');
+    }
+  }
 }

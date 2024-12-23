@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/model/recipe.dart';
+import 'package:recipe_app/widgets/recipeItem.dart';
 
 import '../controller/recipeController.dart';
 import '../navigation/AppRouterDelegate.dart';
@@ -22,8 +23,17 @@ class _RecipesScreenState extends State<RecipesScreen> {
     _getRecipes();
   }
 
-  Future<void> _getRecipes() async{
-    _recipesList = await recipeController.fetchRecipes();
+  Future<void> _getRecipes() async {
+    final recipes = await recipeController.fetchRecipes();
+    setState(() {
+      _recipesList = recipes;
+    });
+  }
+
+  void _deleteRecipeById(String id) {
+    setState(() {
+      _recipesList.removeWhere((recipe) => recipe.id == id);
+    });
   }
 
   @override
@@ -32,35 +42,41 @@ class _RecipesScreenState extends State<RecipesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recipes', style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Recipes',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.blue,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(onPressed: () {
-            final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-            routerDelegate.setNewRoutePath(RouteSettings(name: '/newrecipe'));
-          }, icon: Icon(Icons.add)),
-    
-          IconButton(onPressed: () {
-            _authService.logout();
-            final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-            routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
-          }, icon: Icon(Icons.logout))
+          IconButton(
+              onPressed: () {
+                final routerDelegate =
+                    Router.of(context).routerDelegate as AppRouterDelegate;
+                routerDelegate
+                    .setNewRoutePath(RouteSettings(name: '/newrecipe'));
+              },
+              icon: Icon(Icons.add)),
+          IconButton(
+              onPressed: () {
+                _authService.logout();
+                final routerDelegate =
+                    Router.of(context).routerDelegate as AppRouterDelegate;
+                routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
+              },
+              icon: Icon(Icons.logout))
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 48),
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-
-              ],
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: ListView.separated(
+            itemCount: _recipesList.length,
+            separatorBuilder: (ctx, index) => const SizedBox(height: 20,),
+            itemBuilder: (ctx, i) => RecipeItem(
+                recipe: _recipesList[i],
+                onDelete: _deleteRecipeById,
             ),
-          ),
-        ),
-      )
+          )),
     );
-
   }
 }

@@ -16,6 +16,8 @@ class RecipeItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Acción cuando se haga clic en el item
+        final routerDelegate = Router.of(context).routerDelegate;
+        routerDelegate.setNewRoutePath(RouteSettings(name: '/recipedetail', arguments: recipe));
       },
       child: Container(
         padding: const EdgeInsets.all(12),  // Padding general dentro del item

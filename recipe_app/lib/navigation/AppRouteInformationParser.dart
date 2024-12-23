@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../model/recipe.dart';
+
 class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
   @override
   Future<RouteSettings> parseRouteInformation(RouteInformation routeInformation) async {
@@ -10,6 +12,11 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'register') return RouteSettings(name: '/register');
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'recipes') return RouteSettings(name: '/recipes');
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'newrecipe') return RouteSettings(name: '/newrecipe');
+    if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'detailrecipe') {
+      final recipeJsonString = uri.pathSegments[1];
+      final recipe = Recipe.fromJsonString(recipeJsonString);
+      return RouteSettings(name: '/recipedetail', arguments: recipe);
+    }
     /*if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'productDetail'){
       final productJsonString = uri.pathSegments[1];
       final product = Product.fromJsonString(productJsonString);
@@ -21,11 +28,11 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
   @override
   RouteInformation? restoreRouteInformation(RouteSettings configuration)
   {
-    /*if (configuration.name == '/productDetail') {
-      final product = configuration.arguments as Product;
-      final productJsonString = product.toJsonString();
-      return RouteInformation(uri: Uri.parse('/productDetail/$productJsonString'));
-    }*/
+    if (configuration.name == '/recipedetail') {
+      final recipe = configuration.arguments as Recipe;
+      final recipeJsonString = recipe.toJsonString();
+      return RouteInformation(uri: Uri.parse('/productDetail/$recipeJsonString'));
+    }
     return RouteInformation(uri: Uri.parse(configuration.name ?? '/'));
   }
 }

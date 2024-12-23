@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recipe_app/screens/DetailScreen.dart';
 import 'package:recipe_app/screens/NewRecipeScreen.dart';
 import 'package:recipe_app/screens/RecipesScreen.dart';
 import 'package:recipe_app/screens/RegisterScreen.dart';
 
+import '../model/recipe.dart';
 import '../screens/IntroScreen.dart';
 import '../screens/LoginScreen.dart';
 
@@ -45,8 +47,8 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
           CustomTransitionPage(key: ValueKey('RecipesScreen'), child: RecipesScreen()),
         if(_currentRoute?.name == '/newrecipe')
           CustomTransitionPage(key: ValueKey('NewRecipeScreen'), child: NewRecipeScreen()),
-        /*if(_currentRoute?.name == '/productDetail')
-          CustomTransitionPage(key: ValueKey('ProductDetailScreen'), child: ProductDetailScreen(_currentRoute!.arguments as Product)),*/
+        if(_currentRoute?.name == '/recipedetail')
+          CustomTransitionPage(key: ValueKey('ProductDetailScreen'), child: DetailScreen(_currentRoute?.arguments as Recipe)),
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -60,7 +62,7 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
         else if(_currentRoute?.name == '/login') {
            exit(0);
         }
-        else if(_currentRoute?.name == '/newrecipe')
+        else if(_currentRoute?.name == '/newrecipe' || _currentRoute?.name == '/recipedetail')
         {
           _setNewRoutePath(RouteSettings(name: '/recipes'));
         }

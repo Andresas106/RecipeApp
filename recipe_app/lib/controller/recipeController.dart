@@ -46,7 +46,7 @@ class RecipeController {
       await _firestore.collection('recipes').doc(id).delete();
     }catch(e)
     {
-      print('Error al añadir receta: $e');
+      print('Error al eliminar receta: $e');
     }
   }
 }

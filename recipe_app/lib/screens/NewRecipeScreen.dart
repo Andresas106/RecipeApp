@@ -45,7 +45,6 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
   Future<void> _getCategories() async {
      _categoriesList = await categoryController.fetchCategory();
-     print(_categoriesList);
   }
 
   void _addIngredients(Ingredient ingredient){
@@ -300,7 +299,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         labelText: 'Time (minutes)',
-                        prefixIcon: Icon(Icons.timelapse),
+                        prefixIcon: Icon(Icons.timer),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8)
                         )),
@@ -322,7 +321,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                       },
                     isExpanded: true,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.grade),
+                      prefixIcon: Icon(Icons.whatshot),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8)
                       )
@@ -413,7 +412,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                             routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
                           }
                           else {
-                            showErrorMessage('Don\' leave the preparation steps empty.', context);
+                            showErrorMessage('Don\'t leave the preparation steps empty.', context);
                           }
 
                         }

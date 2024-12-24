@@ -49,4 +49,13 @@ class RecipeController {
       print('Error al eliminar receta: $e');
     }
   }
+
+  Future<void> updateRecipe(Recipe recipe) async {
+    try {
+      await _firestore.collection('recipes').doc(recipe.id).update(recipe.toJson());
+    }catch(e) {
+      print('Error al modificar receta: $e');
+    }
+
+  }
 }

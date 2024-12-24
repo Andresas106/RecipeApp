@@ -285,6 +285,7 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
                 return ListTile(
                   contentPadding: EdgeInsets.symmetric(horizontal: -24 ),
                   title: TextField(
+                    controller: TextEditingController(text: entry.value),
                     onChanged: (value) => _updatePreparationStep(index, value),
                     decoration: InputDecoration(
                       labelText: 'Step ${index + 1}',

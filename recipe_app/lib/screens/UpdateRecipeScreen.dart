@@ -17,7 +17,7 @@ import '../utils/imageProcessing.dart';
 class UpdateRecipeScreen extends StatefulWidget {
   final Recipe recipe;
 
-  UpdateRecipeScreen({required this.recipe});
+  UpdateRecipeScreen(this.recipe, {super.key});
 
   @override
   _UpdateRecipeScreenState createState() => _UpdateRecipeScreenState();
@@ -45,8 +45,10 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
   }
 
   Future<void> _getCategories() async {
-    _categoriesList = await categoryController.fetchCategory();
-    print(_categoriesList);
+    final fetchedCategories = await categoryController.fetchCategory();
+    setState(() {
+      _categoriesList = fetchedCategories;
+    });
   }
 
   void _addIngredients(Ingredient ingredient){
@@ -150,25 +152,32 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
     });
   }
 
+  Future<void> _getImage(String image) async {
+    final File imageFile = await ImageProcessing.base64ToFile(image);
+    setState(() {
+      selectedImage = imageFile;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _getCategories();
     final recipe = widget.recipe;
+    _selectedCategory = recipe.category;
     titleControler.text = recipe.title;
     descriptionControler.text = recipe.description;
     timeController.text = recipe.time.toString();
     _selectedDifficulty = recipe.difficulty;
-    _selectedCategory = recipe.category;
     _preparationSteps.addAll(recipe.preparation_steps);
     _selectedIngredients.addAll(recipe.ingredients);
     _quantitiesIngredients.addAll(recipe.ingredientQuantities);
-    _getCategories();
+    _getImage(recipe.image);
   }
 
   @override
   Widget build(BuildContext context) {
     final AuthService _authService = AuthService();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Update Recipe', style: TextStyle(color: Colors.white)),
@@ -339,7 +348,7 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<Category>(
-                  value: _selectedCategory,
+                  value: widget.recipe.category,
                   hint: Text('Select a category'),
                   items: _categoriesList.map((category) {
                     return DropdownMenuItem<Category>(
@@ -348,9 +357,12 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
                     );
                   }).toList(),
                   onChanged: (Category? newValue) {
-                    setState(() {
-                      _selectedCategory = newValue;
-                    });
+                    if(_selectedCategory != newValue) {
+                      setState(() {
+                        _selectedCategory = newValue;
+                      });
+                    }
+
                   },
                   isExpanded: true,
                   menuMaxHeight: 200,
@@ -427,10 +439,10 @@ class _UpdateRecipeScreenState extends State<UpdateRecipeScreen> {
                     showErrorMessage('Please fill in all fields and select an image.', context);
                   }
                 },
-                child: const Text('Update Recipe', style: TextStyle(fontSize: 20)),
+                child: const Text('Update Recipe', style: TextStyle(fontSize: 18, color: Colors.black87)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.white70,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

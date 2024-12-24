@@ -44,7 +44,10 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   }
 
   Future<void> _getCategories() async {
-     _categoriesList = await categoryController.fetchCategory();
+    final fetchedCategories = await categoryController.fetchCategory();
+    setState(() {
+      _categoriesList = fetchedCategories;
+    });
   }
 
   void _addIngredients(Ingredient ingredient){

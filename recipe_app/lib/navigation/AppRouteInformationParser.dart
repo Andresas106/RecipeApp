@@ -17,6 +17,11 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
       final recipe = Recipe.fromJsonString(recipeJsonString);
       return RouteSettings(name: '/recipedetail', arguments: recipe);
     }
+    if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'updaterecipe') {
+      final recipeJsonString = uri.pathSegments[1];
+      final recipe = Recipe.fromJsonString(recipeJsonString);
+      return RouteSettings(name: '/updaterecipe', arguments: recipe);
+    }
     /*if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'productDetail'){
       final productJsonString = uri.pathSegments[1];
       final product = Product.fromJsonString(productJsonString);
@@ -32,6 +37,12 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
       final recipe = configuration.arguments as Recipe;
       final recipeJsonString = recipe.toJsonString();
       return RouteInformation(uri: Uri.parse('/productDetail/$recipeJsonString'));
+    }
+
+    if (configuration.name == '/updaterecipe') {
+      final recipe = configuration.arguments as Recipe;
+      final recipeJsonString = recipe.toJsonString();
+      return RouteInformation(uri: Uri.parse('/updaterecipe/$recipeJsonString'));
     }
     return RouteInformation(uri: Uri.parse(configuration.name ?? '/'));
   }

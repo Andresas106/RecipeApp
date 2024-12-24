@@ -34,12 +34,14 @@ class _DetailScreenState extends State<DetailScreen> {
         backgroundColor: Colors.blue,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+          IconButton(onPressed: () {
+            final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
+            routerDelegate.setNewRoutePath(RouteSettings(name: '/updaterecipe', arguments: widget.recipe));
+          }, icon: Icon(Icons.edit)),
           IconButton(
             onPressed: () {
               _recipeController.deleteRecipe(widget.recipe.id);
-              final routerDelegate =
-              Router.of(context).routerDelegate as AppRouterDelegate;
+              final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
               routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
             },
             icon: Icon(Icons.delete),

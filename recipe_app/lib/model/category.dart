@@ -34,4 +34,17 @@ class Category {
       'description' : _description,
     };
   }
+
+  // Sobrescribir el operador == para que compare los objetos por sus propiedades
+  @override
+  bool operator ==(Object other) {
+    // Verificar que sea la misma clase y comparar sus propiedades
+    if (identical(this, other)) return true;
+    if (other is! Category) return false;
+    return other.id == id && other.name == name;
+  }
+
+  // Sobrescribir hashCode para que sea consistente con el operador ==
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }

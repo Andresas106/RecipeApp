@@ -22,6 +22,7 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
       final recipe = Recipe.fromJsonString(recipeJsonString);
       return RouteSettings(name: '/updaterecipe', arguments: recipe);
     }
+    if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'shopping') return RouteSettings(name: '/shopping');
     /*if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'productDetail'){
       final productJsonString = uri.pathSegments[1];
       final product = Product.fromJsonString(productJsonString);

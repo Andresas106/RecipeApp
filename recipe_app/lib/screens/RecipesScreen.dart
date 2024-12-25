@@ -58,6 +58,13 @@ class _RecipesScreenState extends State<RecipesScreen> {
               },
               icon: Icon(Icons.add)),
           IconButton(
+            onPressed: () {
+              final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
+              routerDelegate.setNewRoutePath(RouteSettings(name: '/shopping'));
+            },
+            icon: Icon(Icons.shopping_cart)
+          ),
+          IconButton(
               onPressed: () {
                 _authService.logout();
                 final routerDelegate =

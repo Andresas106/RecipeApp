@@ -109,31 +109,41 @@ class _DetailScreenState extends State<DetailScreen> {
                               Padding(
                                 padding:
                                 const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Text(
-                                  "- ${ingredient.name} (${widget.recipe.ingredientQuantities[ingredient] ?? 0})",
-                                  style: TextStyle(fontSize: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "- ${ingredient.name} (${widget.recipe.ingredientQuantities[ingredient] ?? 0})",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Text(
+                                      ingredient.stock > 0 ? "En stock" : "Sin stock",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: ingredient.stock > 0 ? Colors.green : Colors.red,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                           ],
                         ),
                       ),
                     ),
-
                   ),
                   SizedBox(height: 16),
                   Divider(color: Colors.teal, thickness: 1),
                   SizedBox(height: 16),
                   // Preparation Steps
-                  // Preparation Steps
                   Card(
-                    margin: EdgeInsets.symmetric(vertical: 8.0), // Margen para separación vertical
+                    margin: EdgeInsets.symmetric(vertical: 8.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0), // Bordes redondeados
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     elevation: 4,
                     child: Container(
-                      width: double.infinity, // Hace que la Card se estire
-                      padding: const EdgeInsets.all(16.0), // Padding interno
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -418,7 +418,6 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                             else {
                               showErrorMessage('The image is too large and could not be processed', context);
                             }
-                            
                           }
                           else {
                             showErrorMessage('Don\'t leave the preparation steps empty.', context);

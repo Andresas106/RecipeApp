@@ -31,13 +31,14 @@ class RecipeController {
     return recipes;
   }
 
-  Future<void> addRecipe(Recipe recipe) async {
+  Future<bool> addRecipe(Recipe recipe) async {
     try {
       String id = recipe.id.isEmpty ? generateID() : recipe.id;
       await _firestore.collection('recipes').doc(id).set(recipe.toJson());
+      return true;
     }catch(e)
     {
-      print('Error al añadir receta: $e');
+      return false;
     }
   }
 
@@ -50,12 +51,12 @@ class RecipeController {
     }
   }
 
-  Future<void> updateRecipe(Recipe recipe) async {
+  Future<bool> updateRecipe(Recipe recipe) async {
     try {
-      await _firestore.collection('recipes').doc(recipe.id).update(recipe.toJson());
+      await _firestore.collection('ingredients').doc(recipe.id).update(recipe.toJson());
+      return true;
     }catch(e) {
-      print('Error al modificar receta: $e');
+      return false;
     }
-
   }
 }

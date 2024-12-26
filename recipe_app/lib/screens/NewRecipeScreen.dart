@@ -409,10 +409,16 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                 image: base64Image,
                                 category: _selectedCategory!);
 
-                            recipeController.addRecipe(recipe);
-
-                            final routerDelegate = Router.of(context).routerDelegate;
-                            routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
+                            Future<bool> waitRecipeAdd = recipeController.addRecipe(recipe);
+                            
+                            if(await waitRecipeAdd) {
+                              final routerDelegate = Router.of(context).routerDelegate;
+                              routerDelegate.setNewRoutePath(RouteSettings(name: '/recipes'));
+                            }
+                            else {
+                              showErrorMessage('The image is too large and could not be processed', context);
+                            }
+                            
                           }
                           else {
                             showErrorMessage('Don\'t leave the preparation steps empty.', context);

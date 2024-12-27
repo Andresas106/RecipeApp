@@ -12,6 +12,7 @@ class AppRouteInformationParser extends RouteInformationParser<RouteSettings> {
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'register') return RouteSettings(name: '/register');
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'recipes') return RouteSettings(name: '/recipes');
     if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'newrecipe') return RouteSettings(name: '/newrecipe');
+    if(uri.pathSegments.length == 1 && uri.pathSegments[0] == 'favorites') return RouteSettings(name: '/favorites');
     if(uri.pathSegments.length == 2 && uri.pathSegments[0] == 'detailrecipe') {
       final recipeJsonString = uri.pathSegments[1];
       final recipe = Recipe.fromJsonString(recipeJsonString);

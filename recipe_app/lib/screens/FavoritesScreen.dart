@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/controller/favoritesController.dart';
 import 'package:recipe_app/model/recipe.dart';
 import 'package:recipe_app/widgets/recipeItem.dart';
 
-import '../controller/favoritesController.dart';
 import '../controller/recipeController.dart';
 import '../navigation/AppRouterDelegate.dart';
 import '../utils/authService.dart';
 
-class RecipesScreen extends StatefulWidget {
-  const RecipesScreen({super.key});
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  State<RecipesScreen> createState() => _RecipesScreenState();
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _RecipesScreenState extends State<RecipesScreen> {
+class _FavoritesScreenState extends State<FavoritesScreen> {
   final recipeController = RecipeController();
   List<Recipe> _recipesList = [];
 
@@ -26,8 +26,12 @@ class _RecipesScreenState extends State<RecipesScreen> {
 
   Future<void> _getRecipes() async {
     final recipes = await recipeController.fetchRecipes();
+    final favoriteIds = await FavoritesController.getFavorites();
+
+    final favoriteRecipes = recipes.where((recipe) => favoriteIds.contains(recipe.id)).toList();
+
     setState(() {
-      _recipesList = recipes;
+      _recipesList = favoriteRecipes;
     });
   }
 
@@ -45,7 +49,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Recipes',
+          'Favorites',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue,
@@ -53,30 +57,9 @@ class _RecipesScreenState extends State<RecipesScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                final routerDelegate =
-                    Router.of(context).routerDelegate as AppRouterDelegate;
-                routerDelegate
-                    .setNewRoutePath(RouteSettings(name: '/newrecipe'));
-              },
-              icon: Icon(Icons.add)),
-          IconButton(
-              onPressed: () {
-                final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-                routerDelegate.setNewRoutePath(RouteSettings(name: '/favorites'));
-              },
-              icon: Icon(Icons.favorite_border), color: Colors.white,),
-          IconButton(
-            onPressed: () {
-              final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
-              routerDelegate.setNewRoutePath(RouteSettings(name: '/shopping'));
-            },
-            icon: Icon(Icons.shopping_cart)
-          ),
-          IconButton(
-              onPressed: () {
                 _authService.logout();
                 final routerDelegate =
-                    Router.of(context).routerDelegate as AppRouterDelegate;
+                Router.of(context).routerDelegate as AppRouterDelegate;
                 routerDelegate.setNewRoutePath(RouteSettings(name: '/login'));
               },
               icon: Icon(Icons.logout))
@@ -88,8 +71,8 @@ class _RecipesScreenState extends State<RecipesScreen> {
             itemCount: _recipesList.length,
             separatorBuilder: (ctx, index) => const SizedBox(height: 20,),
             itemBuilder: (ctx, i) => RecipeItem(
-                recipe: _recipesList[i],
-                onDelete: _deleteRecipeById,
+              recipe: _recipesList[i],
+              onDelete: _deleteRecipeById,
             ),
           )),
     );

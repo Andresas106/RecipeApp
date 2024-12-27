@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/controller/favoritesController.dart';
 import '../controller/recipeController.dart';
 import '../model/recipe.dart';
 import '../navigation/AppRouterDelegate.dart';
@@ -17,10 +18,28 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   final AuthService _authService = AuthService();
   final RecipeController _recipeController = RecipeController();
+  bool _isFavorite = false;
 
   @override
   void initState() {
     super.initState();
+    _verifyFavorite();
+  }
+
+  Future<void> _verifyFavorite() async {
+    final isFavorite = await FavoritesController.isfavorite(widget.recipe.id);
+    setState(() {
+      _isFavorite = isFavorite;
+    });
+  }
+
+  Future<void> _switchFavorite() async {
+    if(_isFavorite) {
+      await FavoritesController.deleteRecipe(widget.recipe.id);
+    } else {
+      await FavoritesController.addFavorite(widget.recipe.id);
+    }
+    _verifyFavorite();
   }
 
   @override
@@ -34,6 +53,13 @@ class _DetailScreenState extends State<DetailScreen> {
         backgroundColor: Colors.blue,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
+          IconButton(
+              onPressed: _switchFavorite,
+              icon: Icon(
+                _isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: _isFavorite ? Colors.red : Colors.grey,
+      )
+    ),
           IconButton(onPressed: () {
             final routerDelegate = Router.of(context).routerDelegate as AppRouterDelegate;
             routerDelegate.setNewRoutePath(RouteSettings(name: '/updaterecipe', arguments: widget.recipe));
@@ -117,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     Text(
-                                      ingredient.stock > 0 ? "En stock" : "Sin stock",
+                                      ingredient.stock > 0 ? "With stock" : "Without stock",
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: ingredient.stock > 0 ? Colors.green : Colors.red,

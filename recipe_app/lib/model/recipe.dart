@@ -96,12 +96,12 @@ class Recipe {
     };
   }
 
-  // Método para crear un objeto Product desde una cadena JSON
+  // Método para crear un objeto Recipe desde una cadena JSON
   factory Recipe.fromJsonString(String jsonString) {
     return Recipe.fromJson(json.decode(jsonString));
   }
 
-  // Método para convertir el objeto Product en una cadena JSON
+  // Método para convertir el objeto Recipe en una cadena JSON
   String toJsonString() {
     return json.encode(toJson());
   }

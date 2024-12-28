@@ -69,7 +69,8 @@ class AppRouterDelegate extends RouterDelegate<RouteSettings>
         else if(_currentRoute?.name == '/login') {
            exit(0);
         }
-        else if(_currentRoute?.name == '/newrecipe' || _currentRoute?.name == '/recipedetail' || _currentRoute?.name == '/shopping' || _currentRoute?.name == '/favorites')
+        else if(_currentRoute?.name == '/newrecipe' || _currentRoute?.name == '/recipedetail' || _currentRoute?.name == '/shopping' ||
+            _currentRoute?.name == '/favorites')
         {
           _setNewRoutePath(RouteSettings(name: '/recipes'));
         }

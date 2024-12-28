@@ -53,7 +53,7 @@ class RecipeController {
 
   Future<bool> updateRecipe(Recipe recipe) async {
     try {
-      await _firestore.collection('ingredients').doc(recipe.id).update(recipe.toJson());
+      await _firestore.collection('recipes').doc(recipe.id).update(recipe.toJson());
       return true;
     }catch(e) {
       return false;
